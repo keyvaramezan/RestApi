@@ -1,6 +1,9 @@
-﻿using RestApi.Infrastructure.Data.Repositories.Contracts;
-using RestApi.Infrastructure.Data.Repositories.Core;
+﻿using Microsoft.EntityFrameworkCore;
 using RestApi.Domain;
+using RestApi.Infrastructure.Data.Repositories.Contracts;
+using RestApi.Infrastructure.Data.Repositories.Core;
+using RestApi.Infrastructure.Data.Service.Paging;
+using System.Linq.Dynamic.Core;
 
 namespace RestApi.Infrastructure.Data.Repositories
 {
@@ -17,5 +20,16 @@ namespace RestApi.Infrastructure.Data.Repositories
 
         //public Task<IEnumerable<Product>> GetByQuery(int minPrice, int maxPrice) => 
         //    Filter($"p => p.Price >= {minPrice} && p.Price <= {maxPrice}");
+        public override async Task<PagedList<Product>> Search(string searchText, PagingParam paging = null, string sorting = "")
+        {
+            return await _set
+                             .Where(product =>
+                                               EF.Functions.Like(product.Id.ToString(), $"%{searchText}%") ||
+                                               EF.Functions.Like(product.Name, $"%{searchText}%") ||
+                                               EF.Functions.Like(product.Price.ToString(), $"%{searchText}%") ||
+                                               EF.Functions.Like(product.Description, $"%{searchText}%"))
+                                               .Sorting(sorting)
+                                               .Paging(paging);
+        } 
     }
 }

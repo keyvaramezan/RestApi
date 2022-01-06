@@ -1,4 +1,5 @@
 ﻿using RestApi.Domain.Data.Core;
+using RestApi.Infrastructure.Data.Service.Paging;
 using System.Linq.Expressions;
 
 namespace RestApi.Infrastructure.Data.Repositories.Contracts
@@ -15,7 +16,7 @@ namespace RestApi.Infrastructure.Data.Repositories.Contracts
         #endregion
         #region Filter
         Task<IEnumerable<T>> Filter(Expression<Func<T, bool>> predicate);
-        Task<IEnumerable<T>> Search(string predicate);
+        Task<PagedList<T>> Search(string predicate, PagingParam paging = null, string sorting = "");
         #endregion
     }
 }

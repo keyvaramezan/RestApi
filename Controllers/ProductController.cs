@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using RestApi.Application.Models;
 using RestApi.Application.Models.ProductDtos;
 using RestApi.Domain;
 using RestApi.Infrastructure.Data.Repositories.Contracts;
+using RestApi.Infrastructure.Data.Service.Paging;
 
 namespace RestApi.Controllers
 {
@@ -72,9 +74,11 @@ namespace RestApi.Controllers
         //    return Ok(productDtos);
         //}
         [HttpGet]
-        public async Task<IActionResult> GetProducts([FromQuery] string filter)
+        public async Task<IActionResult> GetProducts([FromQuery] SearchRequestDto request)
         {
-            var products = await _repository.Search(filter);
+            var paging = _mapper.Map<PagingParam>(request);
+            var products = await _repository.Search(request.SearchText!, paging, request.Sort!);
+            Response.Headers.Add("X-TotalCount", products.TotalCount.ToString());
             var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
             return Ok(productDtos);
         }

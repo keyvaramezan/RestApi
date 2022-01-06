@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestApi.Domain.Data.Core;
 using RestApi.Infrastructure.Data.Repositories.Contracts;
+using RestApi.Infrastructure.Data.Service.Paging;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 
@@ -10,7 +11,7 @@ namespace RestApi.Infrastructure.Data.Repositories.Core
         where T : class, IEntity<Key>
     {
         private CatalogContext _context;
-        private DbSet<T> _set;
+        protected DbSet<T> _set;
 
         public SqlRepository(CatalogContext context)
         {
@@ -47,7 +48,11 @@ namespace RestApi.Infrastructure.Data.Repositories.Core
         #region Filter
         public async Task<IEnumerable<T>> Filter(Expression<Func<T, bool>> predicate) => await _set.Where(predicate).ToListAsync();
 
-        public async Task<IEnumerable<T>> Search(string predicate) => await _set.Where(predicate).ToListAsync();
+        public virtual Task<PagedList<T>> Search(string searchText, PagingParam paging = null, string sorting = "")
+        {
+            throw new NotImplementedException ();
+        }
+          
 
         #endregion
     }
