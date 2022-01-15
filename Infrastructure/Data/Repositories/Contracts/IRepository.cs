@@ -16,7 +16,7 @@ namespace RestApi.Infrastructure.Data.Repositories.Contracts
         #endregion
         #region Filter
         Task<IEnumerable<T>> Filter(Expression<Func<T, bool>> predicate);
-        Task<PagedList<T>> Search(string predicate, PagingParam paging = null, string sorting = "");
+        Task<PagedList<T>> Search(string predicate, PagingParam? paging = default(PagingParam), string sorting = "");
         #endregion
     }
 }
