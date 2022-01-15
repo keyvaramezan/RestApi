@@ -20,7 +20,9 @@ namespace RestApi.Infrastructure.Data.Repositories
 
         //public Task<IEnumerable<Product>> GetByQuery(int minPrice, int maxPrice) => 
         //    Filter($"p => p.Price >= {minPrice} && p.Price <= {maxPrice}");
-        public override async Task<PagedList<Product>> Search(string searchText, PagingParam paging = null, string sorting = "")
+        public override async Task<PagedList<Product>> Search(string searchText,
+                                                              PagingParam? paging = default(PagingParam),
+                                                              string? sorting = default(string))
         {
             return await _set
                              .Where(product =>

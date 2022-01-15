@@ -48,7 +48,9 @@ namespace RestApi.Infrastructure.Data.Repositories.Core
         #region Filter
         public async Task<IEnumerable<T>> Filter(Expression<Func<T, bool>> predicate) => await _set.Where(predicate).ToListAsync();
 
-        public virtual Task<PagedList<T>> Search(string searchText, PagingParam paging = null, string sorting = "")
+        public virtual Task<PagedList<T>> Search(string searchText,
+                                                PagingParam? paging = default(PagingParam),
+                                                string? sorting = default(string))
         {
             throw new NotImplementedException ();
         }

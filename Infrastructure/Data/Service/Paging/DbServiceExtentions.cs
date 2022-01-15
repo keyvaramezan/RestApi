@@ -5,7 +5,8 @@ namespace RestApi.Infrastructure.Data.Service.Paging
 {
     public static class DbServiceExtentions
     {
-        public static async Task<PagedList<T>> Paging<T>(this IQueryable<T> query, PagingParam paging)
+        public static async Task<PagedList<T>> Paging<T>(this IQueryable<T> query,
+                                                        PagingParam? paging = default(PagingParam))
         {
             if (paging == null)
             {
@@ -16,7 +17,8 @@ namespace RestApi.Infrastructure.Data.Service.Paging
                                     .Take(paging.PageSize).ToListAsync();
             return new PagedList<T>(result, totalCount);
         }
-        public static IQueryable<T> Sorting<T>(this IQueryable<T> query, string sorting)
+        public static IQueryable<T> Sorting<T>(this IQueryable<T> query,
+                                               string? sorting = default(string))
         {
             if (string.IsNullOrEmpty(sorting))
             {
