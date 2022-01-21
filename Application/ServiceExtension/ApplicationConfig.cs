@@ -21,6 +21,7 @@ namespace RestApi.Application.ServiceExtension
                     .AddRepository()
                     .AddEndpointsApiExplorer()
                     .AddSwaggerGen()
+                    .AddAppCors()
                     .AddTestService()
                     .AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -50,6 +51,21 @@ namespace RestApi.Application.ServiceExtension
         private static IServiceCollection AddTestService(this IServiceCollection services)
         {
             return services.AddTransient<IService, TestService>();
+        }
+        private static IServiceCollection AddAppCors(this IServiceCollection services)
+        {
+            services.AddCors(options => 
+            {
+                options.AddDefaultPolicy(builder => 
+                {
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .WithExposedHeaders("X-TotalCount");
+               });
+            });
+            return services;
         }
     }
 }
