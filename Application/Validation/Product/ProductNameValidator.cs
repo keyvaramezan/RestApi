@@ -7,7 +7,7 @@ namespace RestApi.Application.Validation.Product
         public override bool IsValid(object? value)
         {
             if (value == null) return true;
-            return value.ToString().ToCharArray().ToList().All(c => char.IsLetter(c));
+            return value.ToString()!.ToCharArray().ToList().All(c => char.IsLetter(c));
 
         }
     }

@@ -2,6 +2,6 @@
 {
     public abstract class Entity<key> : IEntity<key>
     {
-        public key Id { get; set; }
+        public key? Id { get; set; }
     }
 }

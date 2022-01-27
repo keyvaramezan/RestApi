@@ -4,9 +4,9 @@ namespace RestApi.Application.Models.ProductDtos
 {
     public class UpdateProductDto : IValidatableObject
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public int Price { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
