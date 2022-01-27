@@ -11,7 +11,7 @@ namespace RestApi.Application.Models.ProductDtos
         //[StringLength(maximumLength: 20, MinimumLength = 3)]
         //[ProductNameValidator]
         public string? Name { get; set; }
-        [Range(500, 2000)]
+        [Range(100, 1000)]
         public int Price { get; set; }
         //[RegularExpression(@"([a-zA-Z0-9\\_\\-\\.]+)@([a-zA-Z]+).(.+)")]
         public string? Description { get; set; }
