@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using RestApi.Application.Models.ImageDtos;
 using RestApi.Application.Models.ProductDtos;
@@ -10,13 +11,16 @@ namespace RestApi.Controllers
     [Route("product/{productId}/image")]
     public class ImageController : ControllerBase
     {
+        private readonly IWebHostEnvironment _env;
         private readonly IImageRepository _repository;
         private readonly IMapper _mapper;
 
         public ImageController(
+            IWebHostEnvironment env,
             IImageRepository repository,
             IMapper mapper)
         {
+            _env = env;
             _repository = repository;
             _mapper = mapper;
         }
@@ -51,7 +55,7 @@ namespace RestApi.Controllers
                     return BadRequest($"Invalid ProductId : {productId} and Image Id : {imageId}");
                 }
                 await _repository.Remove(image);
-                
+
                 return Ok();
             }
         }
@@ -64,6 +68,27 @@ namespace RestApi.Controllers
             await _repository.Update(image);
 
             return Ok(_mapper.Map<ImageDto>(image));
+        }
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadImage(int productId, [FromForm] IEnumerable<FormFile> files)
+        {
+            foreach (var file in files)
+            {
+                _env.ContentRootPath = "wwwroot";
+                var name = Path.GetRandomFileName();
+                var ext = Path.GetExtension(file.Name);
+                var path = Path.Combine(_env.ContentRootPath, "assets/images", name, ext);
+                
+                await using FileStream fs = new(path, FileMode.Create);
+                await file.CopyToAsync(fs);
+               
+                var image = new Image();
+                image.Name = path;
+                image.ProductId = productId;
+                
+                await _repository.AddNew(image);
+            }
+            return Ok();
         }
     }
 }
