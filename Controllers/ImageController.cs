@@ -70,20 +70,20 @@ namespace RestApi.Controllers
             return Ok(_mapper.Map<ImageDto>(image));
         }
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadImage(int productId, [FromForm] IEnumerable<FormFile> files)
+        public async Task<IActionResult> UploadImage(int productId, [FromForm] IEnumerable<IFormFile> files)
         {
             foreach (var file in files)
             {
                 _env.ContentRootPath = "wwwroot";
+                var ext = Path.GetExtension(file.FileName);
                 var name = Path.GetRandomFileName();
-                var ext = Path.GetExtension(file.Name);
-                var path = Path.Combine(_env.ContentRootPath, "assets/images", name, ext);
+                var path = Path.Combine(_env.ContentRootPath, "assets/images", name + ext);
                 
                 await using FileStream fs = new(path, FileMode.Create);
                 await file.CopyToAsync(fs);
                
                 var image = new Image();
-                image.Name = path;
+                image.Name = $"assets/images/{name + ext}";
                 image.ProductId = productId;
                 
                 await _repository.AddNew(image);
