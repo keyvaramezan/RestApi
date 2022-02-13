@@ -31,7 +31,6 @@ namespace RestApi.Infrastructure.Data.Repositories.Core
 
         public async Task<T> GetById(Key id) => await _set.FindAsync(id);
 
-
         public Task Remove(T entity)
         {
             _set.Remove(entity);
